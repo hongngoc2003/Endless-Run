@@ -10,6 +10,9 @@ public class Player : MonoBehaviour {
     [Header("Move info")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
+    [SerializeField] private float doubleJumpForce;
+
+    private bool canDoubleJump;
 
     private bool playerStartToRun;
 
@@ -21,6 +24,7 @@ public class Player : MonoBehaviour {
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+
     }
 
     private void Update() {
@@ -36,6 +40,7 @@ public class Player : MonoBehaviour {
     }
 
     private void AnimatorController() {
+        anim.SetBool("canDoubleJump", canDoubleJump);
         anim.SetBool("isGrounded",isGrounded);
         anim.SetFloat("xVelocity", rb.velocity.x);
         anim.SetFloat("yVelocity", rb.velocity.y);
@@ -49,8 +54,18 @@ public class Player : MonoBehaviour {
         if (Input.GetButtonDown("Fire2"))
             playerStartToRun = true;
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump") )
+            JumpButton();
+    }
+
+    private void JumpButton() {
+        if (isGrounded) {
+            canDoubleJump = true;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        } else if(canDoubleJump) {
+            canDoubleJump = false;
+            rb.velocity = new Vector2(rb.velocity.x, doubleJumpForce);
+        }
     }
 
     private void OnDrawGizmos() {
