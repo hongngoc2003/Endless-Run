@@ -331,6 +331,7 @@ GameObject:
   - component: {fileID: 864999407}
   - component: {fileID: 864999406}
   - component: {fileID: 864999405}
+  - component: {fileID: 864999410}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -350,7 +351,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39b67b86f62153f429f2d126d1fe8af7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 864999406}
   moveSpeed: 1
   jumpForce: 12
   whatIsGround:
@@ -461,3 +461,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &864999410
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 864999404}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8f3dcdcd0716a7a46aad5ee198f7c7d3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
