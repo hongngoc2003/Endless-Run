@@ -5,6 +5,14 @@ public class Player : MonoBehaviour {
     private Rigidbody2D rb;
     private Animator anim;
 
+    [Header("Speed info")]
+    [SerializeField] private float maxSpeed;
+    [SerializeField] private float speedMultiplier;
+    [SerializeField] private float milestoneIncreaser;
+    private float speedMilestone;
+    private float defaultMilestoneIncreaser;
+    private float defaultSpeed;
+
 
     [Header("Move info")]
     [SerializeField] private float moveSpeed;
@@ -48,6 +56,9 @@ public class Player : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
+        speedMilestone = milestoneIncreaser;
+        defaultSpeed = moveSpeed;
+        defaultMilestoneIncreaser = milestoneIncreaser;
     }
 
     private void Update() {
@@ -63,10 +74,32 @@ public class Player : MonoBehaviour {
         if (isGrounded)
             canDoubleJump = true;
 
+        ControlSpeed();
+
         CheckForLedge();
         CheckForSlide();
         CheckInput();
 
+    }
+
+    private void ResetSpeed() {
+        moveSpeed = defaultSpeed;
+        milestoneIncreaser = defaultMilestoneIncreaser;
+    }
+
+    private void ControlSpeed() {
+        if (moveSpeed == maxSpeed)
+            return;
+
+        if(transform.position.x > speedMilestone) {
+            speedMilestone += milestoneIncreaser;
+
+            moveSpeed *= speedMultiplier;
+            milestoneIncreaser *= speedMultiplier;
+
+            if(moveSpeed > maxSpeed)
+                moveSpeed = maxSpeed;
+        }
     }
 
     private void CheckForLedge() {
@@ -99,8 +132,10 @@ public class Player : MonoBehaviour {
     }
 
     private void Move() {
-        if (wallDetected)
+        if (wallDetected) {
+            ResetSpeed();
             return;
+        }
 
         if(isSliding)
             rb.velocity = new Vector2(slideSpeed, rb.velocity.y);
