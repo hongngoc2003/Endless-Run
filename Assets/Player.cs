@@ -1,11 +1,22 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
     private Rigidbody2D rb;
     private Animator anim;
+    private SpriteRenderer sr;
 
-    [Header("Speed info")]
+    public bool isDead;
+    private bool playerStartToRun;
+
+    [Header("Knockback info")]
+    [SerializeField] private Vector2 knockbackDir;
+    private bool isKnocked;
+    private bool canBeKnocked = true;
+
+    [Header("Move info")]
+    [SerializeField] private float moveSpeed;
     [SerializeField] private float maxSpeed;
     [SerializeField] private float speedMultiplier;
     [SerializeField] private float milestoneIncreaser;
@@ -14,14 +25,10 @@ public class Player : MonoBehaviour {
     private float defaultSpeed;
 
 
-    [Header("Move info")]
-    [SerializeField] private float moveSpeed;
+    [Header("Jump info")]
     [SerializeField] private float jumpForce;
     [SerializeField] private float doubleJumpForce;
-
     private bool canDoubleJump;
-
-    private bool playerStartToRun;
 
     [Header("Slide info")]
     [SerializeField] private float slideSpeed;
@@ -55,6 +62,7 @@ public class Player : MonoBehaviour {
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        sr = GetComponent<SpriteRenderer>();
 
         speedMilestone = milestoneIncreaser;
         defaultSpeed = moveSpeed;
@@ -68,8 +76,19 @@ public class Player : MonoBehaviour {
         slideTimeCounter -= Time.deltaTime;
         slideCooldownCounter -= Time.deltaTime;
 
+        if (Input.GetKeyDown(KeyCode.K))
+            Knockback();
+        if (Input.GetKeyDown(KeyCode.D) && !isDead)
+            StartCoroutine(Die());
+
+        if(isDead)
+            return;
+
+        if (isKnocked)
+            return;
+
         if (playerStartToRun == true)
-            Move();
+            ControlMove();
 
         if (isGrounded)
             canDoubleJump = true;
@@ -77,11 +96,55 @@ public class Player : MonoBehaviour {
         ControlSpeed();
 
         CheckForLedge();
-        CheckForSlide();
+        CancelSlide();
         CheckInput();
 
     }
 
+    private IEnumerator Die() {
+        isDead = true;
+        canBeKnocked = false;
+        rb.velocity = knockbackDir;
+        anim.SetBool("isDead", true);
+
+        yield return new WaitForSeconds(.5f);
+        rb.velocity = Vector2.zero;
+    }
+
+    private IEnumerator MakeInvicible() {
+        Color originColor = sr.color;
+        Color darkColor = new Color(sr.color.r, sr.color.g, sr.color.b, .5f);
+
+        canBeKnocked = false;
+
+        for (int i = 0; i < 5; i++)
+        {
+            sr.color = darkColor;
+            yield return new WaitForSeconds(.2f);
+
+            sr.color = originColor;
+            yield return new WaitForSeconds(.2f);
+        }
+
+
+        sr.color = originColor;
+        canBeKnocked = true;
+    }
+
+    #region Knockback
+    private void Knockback() {
+        if (!canBeKnocked)
+            return;
+
+        StartCoroutine(MakeInvicible());
+        isKnocked = true;
+        rb.velocity = knockbackDir;
+    }
+
+    private void CancelKnockback() => isKnocked = false;
+    #endregion
+
+    #region SpeedControl
     private void ResetSpeed() {
         moveSpeed = defaultSpeed;
         milestoneIncreaser = defaultMilestoneIncreaser;
@@ -101,7 +164,9 @@ public class Player : MonoBehaviour {
                 moveSpeed = maxSpeed;
         }
     }
+    #endregion
 
+    #region LedgeControl
     private void CheckForLedge() {
         if(ledgeDetected && canGrabLedge) {
             canGrabLedge = false;
@@ -128,12 +193,34 @@ public class Player : MonoBehaviour {
 
     private void AllowLedgeGrab() => canGrabLedge = true;
 
-    private void CheckForSlide() {
+    #endregion
+
+    private void CancelSlide() {
         if(slideTimeCounter < 0 && !ceilingDetected)
             isSliding = false;
     }
+    private void RollAnimFinished() => anim.SetBool("canRoll", false);
+    private void SlideButtonCheck() {
+        if(rb.velocity.x != 0 || slideCooldownCounter < 0) {
+            isSliding = true;
+            slideTimeCounter = slideTime;
+            slideCooldownCounter = slideCooldown;
+        }
+    }
+    private void JumpButton() {
+        if (isSliding)
+            return;
 
-    private void Move() {
+        if (isGrounded) {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        } else if (canDoubleJump) {
+            canDoubleJump = false;
+            rb.velocity = new Vector2(rb.velocity.x, doubleJumpForce);
+        }
+    }
+
+
+    private void ControlMove() {
         if (wallDetected) {
             ResetSpeed();
             return;
@@ -153,20 +240,21 @@ public class Player : MonoBehaviour {
         anim.SetFloat("xVelocity", rb.velocity.x);
         anim.SetFloat("yVelocity", rb.velocity.y);
         anim.SetBool("canClimb",canClimb);
+        anim.SetBool("isKnocked", isKnocked);
+
 
         if(rb.velocity.y < -20) {
             anim.SetBool("canRoll", true);
         }
     }
 
-    private void RollAnimFinished() => anim.SetBool("canRoll", false);
+
+
 
     private void CheckCollision() {
         isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
         wallDetected = Physics2D.BoxCast(wallCheck.position, wallCheckSize, 0, Vector2.zero, 0, whatIsGround);
         ceilingDetected = Physics2D.Raycast(transform.position, Vector2.up, ceilingCheckDistance, whatIsGround);
-
-        Debug.Log(ledgeDetected);
     }
 
     private void CheckInput() {
@@ -179,26 +267,6 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.F))
             SlideButtonCheck();
 
-    }
-
-    private void SlideButtonCheck() {
-        if(rb.velocity.x != 0 || slideCooldownCounter < 0) {
-            isSliding = true;
-            slideTimeCounter = slideTime;
-            slideCooldownCounter = slideCooldown;
-        }
-    }
-
-    private void JumpButton() {
-        if (isSliding)
-            return;
-
-        if (isGrounded) {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-        } else if (canDoubleJump) {
-            canDoubleJump = false;
-            rb.velocity = new Vector2(rb.velocity.x, doubleJumpForce);
-        }
     }
 
     private void OnDrawGizmos() {
