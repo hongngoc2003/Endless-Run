@@ -32,6 +32,17 @@ public class Player : MonoBehaviour {
     private bool isGrounded;
     private bool wallDetected;
     private bool ceilingDetected;
+    [HideInInspector] public bool ledgeDetected;
+
+    [Header("Ledge info")]
+    [SerializeField] private Vector2 offset1;
+    [SerializeField] private Vector2 offset2;
+
+    private Vector2 climbBeginPosition;
+    private Vector2 climOverPosition;
+
+    private bool canGrabLedge = true;
+    private bool canClimb;
 
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -52,10 +63,35 @@ public class Player : MonoBehaviour {
         if (isGrounded)
             canDoubleJump = true;
 
+        CheckForLedge();
         CheckForSlide();
         CheckInput();
 
     }
+
+    private void CheckForLedge() {
+        if(ledgeDetected && canGrabLedge) {
+            canGrabLedge = false;
+
+            Vector2 ledgePosition = GetComponentInChildren<LedgeDetection>().transform.position;
+
+            climbBeginPosition = ledgePosition + offset1;
+            climOverPosition = ledgePosition + offset2;
+
+            canClimb = true;
+        }
+
+        if(canClimb)
+            transform.position = climbBeginPosition;
+    }
+
+    private void LedgeClimbOver() {
+        canClimb = false;
+        transform.position = climOverPosition;
+        Invoke("AllowLedgeGrab", .1f);
+    }
+
+    private void AllowLedgeGrab() => canGrabLedge = true;
 
     private void CheckForSlide() {
         if(slideTimeCounter < 0 && !ceilingDetected)
@@ -79,12 +115,15 @@ public class Player : MonoBehaviour {
         
         anim.SetFloat("xVelocity", rb.velocity.x);
         anim.SetFloat("yVelocity", rb.velocity.y);
+        anim.SetBool("canClimb",canClimb);
     }
 
     private void CheckCollision() {
         isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
         wallDetected = Physics2D.BoxCast(wallCheck.position, wallCheckSize, 0, Vector2.zero, 0, whatIsGround);
         ceilingDetected = Physics2D.Raycast(transform.position, Vector2.up, ceilingCheckDistance, whatIsGround);
+
+        Debug.Log(ledgeDetected);
     }
 
     private void CheckInput() {
