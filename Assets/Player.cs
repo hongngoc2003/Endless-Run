@@ -101,6 +101,13 @@ public class Player : MonoBehaviour {
 
     }
 
+    public void GotDamage() {
+        if (moveSpeed >= maxSpeed)
+            Knockback();
+        else
+            StartCoroutine(Die());
+    }
+
     private IEnumerator Die() {
         isDead = true;
         canBeKnocked = false;
@@ -109,6 +116,9 @@ public class Player : MonoBehaviour {
 
         yield return new WaitForSeconds(.5f);
         rb.velocity = Vector2.zero;
+
+        yield return new WaitForSeconds(1f);
+        GameManager.Instance.RestartLevel();
     }
 
     private IEnumerator MakeInvicible() {
