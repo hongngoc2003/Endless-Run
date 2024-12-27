@@ -9,9 +9,11 @@ public class MovingTrap : Trap{
 
     private int i;
 
-    private void Start() {
+    protected override void Start() {
+        base.Start();
         transform.position = movePoint[0].position;
     }
+
     private void Update() {
         transform.position = Vector3.MoveTowards(transform.position, movePoint[i].position, speed * Time.deltaTime);
 

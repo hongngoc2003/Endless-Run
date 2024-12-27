@@ -9,7 +9,15 @@ public class CoinGenerator : MonoBehaviour
 
     [SerializeField] private int minCoin;
     [SerializeField] private int maxCoin;
+
+    [SerializeField] private SpriteRenderer[] coinImg;
+ 
     private void Start() {
+        for (int i = 0; i < coinImg.Length; i++)
+        {
+            coinImg[i].sprite = null;
+        }
+
         amountOfCoin = Random.Range(minCoin, maxCoin);
         int addOffset = amountOfCoin / 2;
 

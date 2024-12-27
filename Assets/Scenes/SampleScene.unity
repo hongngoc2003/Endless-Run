@@ -1471,7 +1471,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelPart:
-  - {fileID: 6506923577272429436, guid: aeb20d01573cfa24f9b831b061fcd493, type: 3}
+  - {fileID: 6506923577272429436, guid: 573c00b31e3a4114aa1eb4b4f981ecc7, type: 3}
   nextPartPosition: {x: 0, y: 0, z: 0}
   distanceToSpawn: 50
   distanceToDelete: 50
