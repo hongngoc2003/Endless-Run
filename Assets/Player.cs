@@ -8,7 +8,8 @@ public class Player : MonoBehaviour {
     private SpriteRenderer sr;
 
     public bool isDead;
-    private bool playerStartToRun;
+    [HideInInspector] public bool playerStartToRun;
+    [HideInInspector] public bool extraLife;
 
     [Header("Knockback info")]
     [SerializeField] private Vector2 knockbackDir;
@@ -67,6 +68,8 @@ public class Player : MonoBehaviour {
         speedMilestone = milestoneIncreaser;
         defaultSpeed = moveSpeed;
         defaultMilestoneIncreaser = milestoneIncreaser;
+
+
     }
 
     private void Update() {
@@ -76,10 +79,12 @@ public class Player : MonoBehaviour {
         slideTimeCounter -= Time.deltaTime;
         slideCooldownCounter -= Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.K))
-            Knockback();
-        if (Input.GetKeyDown(KeyCode.D) && !isDead)
-            StartCoroutine(Die());
+        extraLife = moveSpeed >= maxSpeed;
+
+        //if (Input.GetKeyDown(KeyCode.K))
+        //    Knockback();
+        //if (Input.GetKeyDown(KeyCode.D) && !isDead)
+        //    StartCoroutine(Die());
 
         if(isDead)
             return;
@@ -102,7 +107,7 @@ public class Player : MonoBehaviour {
     }
 
     public void GotDamage() {
-        if (moveSpeed >= maxSpeed)
+        if (extraLife)
             Knockback();
         else
             StartCoroutine(Die());
@@ -268,15 +273,11 @@ public class Player : MonoBehaviour {
     }
 
     private void CheckInput() {
-        if (Input.GetButtonDown("Fire2"))
-            playerStartToRun = true;
-
         if (Input.GetButtonDown("Jump"))
             JumpButton();
 
         if (Input.GetKeyDown(KeyCode.F))
             SlideButtonCheck();
-
     }
 
     private void OnDrawGizmos() {
