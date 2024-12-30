@@ -123,6 +123,7 @@ public class Player : MonoBehaviour {
         rb.velocity = Vector2.zero;
 
         yield return new WaitForSeconds(1f);
+
         GameManager.Instance.RestartLevel();
     }
 
