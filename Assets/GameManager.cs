@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
     public static GameManager Instance;
 
+    public UIMain ui;
     public Player player;
 
     [Header("Color info")]
@@ -13,8 +14,11 @@ public class GameManager : MonoBehaviour {
     [Header("Score info")]
     public float distance;
     public int coins;
+    public float score;
     private void Awake() {
         Instance = this;
+        Time.timeScale = 1;
+
         //LoadColor();
     }
 
@@ -45,17 +49,21 @@ public class GameManager : MonoBehaviour {
     }
     public void UnlockPlayer() => player.playerStartToRun = true;
     public void RestartLevel() {
-        Save();
         SceneManager.LoadScene(0);
     }
     public void Save() {
         int savedCoins = PlayerPrefs.GetInt("Coins");
         PlayerPrefs.SetInt("Coins", savedCoins + coins);
 
-        float score = distance * coins;
+         score = distance * coins;
         PlayerPrefs.SetFloat("LastScore", score);
 
         if(PlayerPrefs.GetFloat("HighScore") < score)
             PlayerPrefs.SetFloat(("HighScore"), score);
+    }
+
+    public void EndGame() {
+        Save();
+        ui.OpenEndGameUI();
     }
 }

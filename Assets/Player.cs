@@ -114,17 +114,18 @@ public class Player : MonoBehaviour {
     }
 
     private IEnumerator Die() {
+        AudioManager.Instance.PlaySFX(9);
         isDead = true;
         canBeKnocked = false;
         rb.velocity = knockbackDir;
         anim.SetBool("isDead", true);
 
-        yield return new WaitForSeconds(.5f);
-        rb.velocity = Vector2.zero;
+        Time.timeScale = .6f;
 
         yield return new WaitForSeconds(1f);
+        rb.velocity = Vector2.zero;
 
-        GameManager.Instance.RestartLevel();
+        GameManager.Instance.EndGame();
     }
 
     private IEnumerator MakeInvicible() {
@@ -229,9 +230,11 @@ public class Player : MonoBehaviour {
 
         if (isGrounded) {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            AudioManager.Instance.PlaySFX(5);
         } else if (canDoubleJump) {
             canDoubleJump = false;
             rb.velocity = new Vector2(rb.velocity.x, doubleJumpForce);
+            AudioManager.Instance.PlaySFX(6);
         }
     }
 
