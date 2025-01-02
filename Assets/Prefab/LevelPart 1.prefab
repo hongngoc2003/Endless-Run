@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6400539114850149952}
   - component: {fileID: 392391341287377050}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -68,7 +68,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4125457458387252942}
   - component: {fileID: 790067823709219465}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3902485375797535519}
   - component: {fileID: 2823822186959238918}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 8010067935070359642}
   - component: {fileID: 7560755395653077378}
   - component: {fileID: 7195143176764591096}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Platform (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -431,7 +431,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1861313212985505401}
   - component: {fileID: 5755027474611641365}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -515,7 +515,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5239323116920965152}
   - component: {fileID: 8302345224404613700}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -599,7 +599,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5443953114328163661}
   - component: {fileID: 8778620973105005840}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -659,7 +659,7 @@ GameObject:
   - component: {fileID: 4801855456594579293}
   - component: {fileID: 8152313544091439726}
   - component: {fileID: 7142718414589976083}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Platform (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -842,7 +842,7 @@ GameObject:
   - component: {fileID: 8002173653073116822}
   - component: {fileID: 5984680933060199135}
   - component: {fileID: 5896495174887073828}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1034,6 +1034,10 @@ PrefabInstance:
     - target: {fileID: 5891154607755340548, guid: 81d22bc4eae61e3469d9ca3d8e80e70d, type: 3}
       propertyPath: m_LocalPosition.y
       value: -3.74
+      objectReference: {fileID: 0}
+    - target: {fileID: 5891154608630159645, guid: 81d22bc4eae61e3469d9ca3d8e80e70d, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6021953571168004786, guid: 81d22bc4eae61e3469d9ca3d8e80e70d, type: 3}
       propertyPath: m_Name

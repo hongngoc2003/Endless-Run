@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 5891154608630159646}
   - component: {fileID: 5891154608630159647}
   - component: {fileID: 5891154608630159644}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MovingTrap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,6 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 348b40fac012a6a4aa48594290105b40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chanceToSpawn: 60
   speed: 4
   rotateSpeed: 200
   movePoint:

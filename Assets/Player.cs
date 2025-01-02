@@ -16,6 +16,11 @@ public class Player : MonoBehaviour {
     private bool isKnocked;
     private bool canBeKnocked = true;
 
+    [Header("VFX")]
+    [SerializeField] private ParticleSystem dustFX;
+    [SerializeField] private ParticleSystem bloodFX;
+
+
     [Header("Move info")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float maxSpeed;
@@ -25,6 +30,7 @@ public class Player : MonoBehaviour {
     private float defaultMilestoneIncreaser;
     private float defaultSpeed;
 
+    private bool readyToLand; 
 
     [Header("Jump info")]
     [SerializeField] private float jumpForce;
@@ -86,7 +92,8 @@ public class Player : MonoBehaviour {
         //if (Input.GetKeyDown(KeyCode.D) && !isDead)
         //    StartCoroutine(Die());
 
-        if(isDead)
+
+        if (isDead)
             return;
 
         if (isKnocked)
@@ -100,13 +107,26 @@ public class Player : MonoBehaviour {
 
         ControlSpeed();
 
+        CheckForLanding();
         CheckForLedge();
         CancelSlide();
         CheckInput();
 
     }
 
+    private void CheckForLanding() {
+        if (rb.velocity.y < -5 && !isGrounded)
+            readyToLand = true;
+
+        if (readyToLand && isGrounded) {
+            dustFX.Play();
+            readyToLand = false;
+        }
+    }
+
     public void GotDamage() {
+        bloodFX.Play();
+
         if (extraLife)
             Knockback();
         else
@@ -163,6 +183,9 @@ public class Player : MonoBehaviour {
 
     #region SpeedControl
     private void ResetSpeed() {
+        if (isSliding)
+            return;
+
         moveSpeed = defaultSpeed;
         milestoneIncreaser = defaultMilestoneIncreaser;
     }
@@ -218,24 +241,35 @@ public class Player : MonoBehaviour {
     }
     private void RollAnimFinished() => anim.SetBool("canRoll", false);
     private void SlideButtonCheck() {
+        if (isDead)
+            return;
+
         if(rb.velocity.x != 0 || slideCooldownCounter < 0) {
+            dustFX.Play();
             isSliding = true;
             slideTimeCounter = slideTime;
             slideCooldownCounter = slideCooldown;
         }
     }
     private void JumpButton() {
-        if (isSliding)
+        if (isSliding || isDead)
             return;
 
+        RollAnimFinished();
+
         if (isGrounded) {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             AudioManager.Instance.PlaySFX(5);
+            Jump(jumpForce);
         } else if (canDoubleJump) {
             canDoubleJump = false;
-            rb.velocity = new Vector2(rb.velocity.x, doubleJumpForce);
+            Jump(doubleJumpForce);
             AudioManager.Instance.PlaySFX(6);
         }
+    }
+
+    private void Jump(float force) {
+        dustFX.Play();
+        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
 
 
@@ -269,13 +303,6 @@ public class Player : MonoBehaviour {
 
 
 
-
-    private void CheckCollision() {
-        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
-        wallDetected = Physics2D.BoxCast(wallCheck.position, wallCheckSize, 0, Vector2.zero, 0, whatIsGround);
-        ceilingDetected = Physics2D.Raycast(transform.position, Vector2.up, ceilingCheckDistance, whatIsGround);
-    }
-
     private void CheckInput() {
         if (Input.GetButtonDown("Jump"))
             JumpButton();
@@ -283,6 +310,13 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.F))
             SlideButtonCheck();
     }
+
+    private void CheckCollision() {
+        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
+        wallDetected = Physics2D.BoxCast(wallCheck.position, wallCheckSize, 0, Vector2.zero, 0, whatIsGround);
+        ceilingDetected = Physics2D.Raycast(transform.position, Vector2.up, ceilingCheckDistance, whatIsGround);
+    }
+
 
     private void OnDrawGizmos() {
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x, transform.position.y - groundCheckDistance));

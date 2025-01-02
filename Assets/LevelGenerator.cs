@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 
-public class LevelGenerator : MonoBehaviour
-{
+public class LevelGenerator : MonoBehaviour {
     [SerializeField] private Transform[] levelPart;
     [SerializeField] private Vector3 nextPartPosition;
 
@@ -30,10 +26,10 @@ public class LevelGenerator : MonoBehaviour
     }
 
     private void DeletePlatform() {
-        if(transform.childCount > 0) {
+        if (transform.childCount > 0) {
             Transform partToDelete = transform.GetChild(0);
 
-            if(Vector2.Distance(player.transform.position, partToDelete.position) > distanceToDelete)
+            if (Vector2.Distance(player.transform.position, partToDelete.position) > distanceToDelete)
                 Destroy(partToDelete.gameObject);
         }
     }

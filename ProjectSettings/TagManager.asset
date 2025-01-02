@@ -8,13 +8,13 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Ground
+  - Post processing
   - Water
   - UI
-  - Background
-  - 
-  - 
-  - 
+  - Ground
+  - Player
+  - Traps
+  - Coins
   - 
   - 
   - 
