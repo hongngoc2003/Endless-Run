@@ -29,6 +29,8 @@ public class UIMain : MonoBehaviour
         }
 
         SwitchMenuTo(mainMenu);
+        AudioManager.Instance.PlayBGM(0);
+
 
         lastScoreText.text = "Last score: " + PlayerPrefs.GetFloat("LastScore").ToString("#,#");
         highScoreText.text = "High score: " + PlayerPrefs.GetFloat("HighScore").ToString("#,#");
@@ -46,17 +48,6 @@ public class UIMain : MonoBehaviour
         coinsText.text = PlayerPrefs.GetInt("Coins").ToString("#,#");
     }
 
-    public void MuteGame() {
-        gameMuted = !gameMuted;
-
-        if (gameMuted) {
-            muteIcon.color = new Color(1, 1, 1, .5f);
-            AudioListener.volume = 0;
-        } else {
-            muteIcon.color = Color.white;
-            AudioListener.volume = 1;
-        }
-    }
 
     public void StartGame() {
         muteIcon = ingameMuteIcon;
@@ -65,6 +56,7 @@ public class UIMain : MonoBehaviour
             muteIcon.color = new Color(1, 1, 1, .5f);
 
         GameManager.Instance.UnlockPlayer();
+        AudioManager.Instance.PlayBGM(1);
     }
     public void PauseGame() {
         if(gamePaused) {
@@ -81,5 +73,8 @@ public class UIMain : MonoBehaviour
     }
     public void OpenEndGameUI() {
         SwitchMenuTo(endGame);
+    }
+    public void Exit() {
+        Application.Quit();
     }
 }

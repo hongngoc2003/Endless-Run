@@ -307,7 +307,7 @@ public class Player : MonoBehaviour {
         if (Input.GetButtonDown("Jump"))
             JumpButton();
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.E))
             SlideButtonCheck();
     }
 

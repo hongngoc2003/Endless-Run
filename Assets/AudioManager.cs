@@ -7,16 +7,15 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance;
 
     [SerializeField] private AudioSource[] sfx;
-    [SerializeField] private AudioSource[] bgm;
+    [SerializeField] public AudioSource[] bgm;
     private int bgmIndex;
+    public int BGMCount => bgm.Length;
     private void Awake() {
         Instance = this;
     }
 
     private void Update() {
-        if (!bgm[bgmIndex].isPlaying) {
-            PlayRandomBGM();
-        }
+        
     }
 
     public void PlaySFX(int i) {
@@ -33,6 +32,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlayBGM(int i) {
         StopBGM();
+        bgm[i].loop = true;
         bgm[i].Play();
     }
 

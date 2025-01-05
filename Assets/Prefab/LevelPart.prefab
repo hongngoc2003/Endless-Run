@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3902485375797535519}
   - component: {fileID: 2823822186959238918}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1022428003069585829}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Limiter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1594536788743443313}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: StartPoint
   m_TagString: Untagged
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
@@ -155,7 +155,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6303030549504319142}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EndPoint
   m_TagString: Untagged
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
@@ -187,7 +187,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5443953114328163661}
   - component: {fileID: 8778620973105005840}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,7 +245,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6506923577272429436}
   - component: {fileID: 1018061628036283853}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LevelPart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -298,7 +298,7 @@ GameObject:
   - component: {fileID: 8002173653073116822}
   - component: {fileID: 5984680933060199135}
   - component: {fileID: 5896495174887073828}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -313,7 +313,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8002173653073116819}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.8381, y: -0.04, z: 0}
+  m_LocalPosition: {x: 0.18, y: -1.18, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
